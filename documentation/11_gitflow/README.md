@@ -390,7 +390,7 @@ docs(git): add gitflow documentation
 
 test(auth): add login integration tests
 ```
-c
+
 ---
 
 # 11. Eliminación de ramas
