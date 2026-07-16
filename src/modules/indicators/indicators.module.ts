@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Indicator } from './entities/indicator.entity';
 import { IndicatorYearTarget } from './entities/indicator-year-target.entity';
@@ -18,7 +18,7 @@ import { ActivitiesModule } from '../activities/activities.module';
     ]),
     ObjectivesModule,
     ResultsModule,
-    ActivitiesModule,
+    forwardRef(() => ActivitiesModule),
   ],
   controllers: [IndicatorsController],
   providers: [IndicatorsService],

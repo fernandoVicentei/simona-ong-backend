@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 
 import { Result } from '../../results/entities/result.entity';
+import { Indicator } from '../../indicators/entities/indicator.entity';
 
 @Entity('activities')
 @Index('UQ_ACTIVITY_CODE_PER_RESULT', ['resultId', 'code'], {
@@ -34,6 +35,34 @@ export class Activity {
     name: 'result_id',
   })
   result: Result;
+
+  @Column({
+    name: 'objective_indicator_id',
+    nullable: true,
+  })
+  objectiveIndicatorId: number | null;
+
+  @ManyToOne(() => Indicator, {
+    nullable: true,
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE',
+  })
+  @JoinColumn({ name: 'objective_indicator_id' })
+  objectiveIndicator: Indicator | null;
+
+  @Column({
+    name: 'result_indicator_id',
+    nullable: true,
+  })
+  resultIndicatorId: number | null;
+
+  @ManyToOne(() => Indicator, {
+    nullable: true,
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE',
+  })
+  @JoinColumn({ name: 'result_indicator_id' })
+  resultIndicator: Indicator | null;
 
   @Column({
     length: 30,

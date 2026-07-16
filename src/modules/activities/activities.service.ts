@@ -2,11 +2,14 @@ import {
     Injectable,
     NotFoundException,
     ConflictException,
+    Inject,
+    forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Activity } from './entities/activity.entity';
 import { ResultsService } from '../results/results.service';
+import { IndicatorsService } from '../indicators/indicators.service';
 import { CreateActivityDto } from './dto/create-activity.dto';
 import { UpdateActivityDto } from './dto/update-activity.dto';
 
@@ -16,19 +19,21 @@ export class ActivitiesService {
         @InjectRepository(Activity)
         private readonly activityRepository: Repository<Activity>,
         private readonly resultsService: ResultsService,
+        @Inject(forwardRef(() => IndicatorsService))
+        private readonly indicatorsService: IndicatorsService,
     ) {}
 
     async findAll(): Promise<Activity[]> {
         return this.activityRepository.find({
             order: { id: 'ASC' },
-            relations: ['result'],
+            relations: ['result', 'objectiveIndicator', 'resultIndicator'],
         });
     }
 
     async findOne(id: number): Promise<Activity> {
         const activity = await this.activityRepository.findOne({
             where: { id },
-            relations: ['result'],
+            relations: ['result', 'objectiveIndicator', 'resultIndicator'],
         });
 
         if (!activity) {
@@ -41,11 +46,19 @@ export class ActivitiesService {
     }
 
     async create(createActivityDto: CreateActivityDto): Promise<Activity> {
-        const { resultId, code } = createActivityDto;
+        const { resultId, code, objectiveIndicatorId, resultIndicatorId } =
+            createActivityDto;
 
         await this.resultsService.findOne(resultId);
 
         await this.ensureCodeNotExistsInResult(resultId, code);
+
+        if (objectiveIndicatorId !== undefined) {
+            await this.indicatorsService.findOne(objectiveIndicatorId);
+        }
+        if (resultIndicatorId !== undefined) {
+            await this.indicatorsService.findOne(resultIndicatorId);
+        }
 
         const activity = this.activityRepository.create(createActivityDto);
         return this.activityRepository.save(activity);
@@ -78,6 +91,24 @@ export class ActivitiesService {
             await this.ensureCodeNotExistsInResult(
                 resultId,
                 updateActivityDto.code,
+            );
+        }
+
+        if (
+            updateActivityDto.objectiveIndicatorId !== undefined &&
+            updateActivityDto.objectiveIndicatorId !==
+                activity.objectiveIndicatorId
+        ) {
+            await this.indicatorsService.findOne(
+                updateActivityDto.objectiveIndicatorId,
+            );
+        }
+        if (
+            updateActivityDto.resultIndicatorId !== undefined &&
+            updateActivityDto.resultIndicatorId !== activity.resultIndicatorId
+        ) {
+            await this.indicatorsService.findOne(
+                updateActivityDto.resultIndicatorId,
             );
         }
 
