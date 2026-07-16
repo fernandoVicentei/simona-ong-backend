@@ -3,6 +3,8 @@ import {
     NotFoundException,
     ConflictException,
     BadRequestException,
+    Inject,
+    forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -23,6 +25,7 @@ export class IndicatorsService {
         private readonly indicatorRepository: Repository<Indicator>,
         private readonly objectivesService: ObjectivesService,
         private readonly resultsService: ResultsService,
+        @Inject(forwardRef(() => ActivitiesService))
         private readonly activitiesService: ActivitiesService,
     ) {}
 

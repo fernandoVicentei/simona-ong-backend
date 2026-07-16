@@ -46,6 +46,14 @@ export class UpdateActivityDto {
     @IsOptional()
     endDate?: string;
 
+    @IsInt({ message: 'El ID del indicador de objetivo debe ser un número entero' })
+    @IsOptional()
+    objectiveIndicatorId?: number;
+
+    @IsInt({ message: 'El ID del indicador de resultado debe ser un número entero' })
+    @IsOptional()
+    resultIndicatorId?: number;
+
     @IsBoolean({ message: 'El estado activo debe ser un valor booleano' })
     @IsOptional()
     active?: boolean;
