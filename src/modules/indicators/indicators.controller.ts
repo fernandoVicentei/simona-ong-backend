@@ -7,6 +7,7 @@ import {
     ParseIntPipe,
     Patch,
     Post,
+    Query,
 } from '@nestjs/common';
 import { IndicatorsService } from './indicators.service';
 import { CreateIndicatorDto } from './dto/create-indicator.dto';
@@ -22,8 +23,21 @@ export class IndicatorsController {
     ) {}
 
     @Get()
-    async findAll(): Promise<ApiResponse<Indicator[]>> {
-        const data = await this.indicatorsService.findAll();
+    async findAll(
+        @Query('type') type?: string,
+        @Query('objectiveId') objectiveId?: string,
+        @Query('resultId') resultId?: string,
+        @Query('activityId') activityId?: string,
+    ): Promise<ApiResponse<Indicator[]>> {
+        const filters: any = {};
+        if (type) filters.type = type;
+        if (objectiveId) filters.objectiveId = Number(objectiveId);
+        if (resultId) filters.resultId = Number(resultId);
+        if (activityId) filters.activityId = Number(activityId);
+
+        const data = await this.indicatorsService.findAll(
+            Object.keys(filters).length > 0 ? filters : undefined,
+        );
         return successResponse(
             data,
             'Listado de indicadores obtenido exitosamente',

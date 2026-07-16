@@ -3,6 +3,8 @@ import {
     NotFoundException,
     ConflictException,
     BadRequestException,
+    Inject,
+    forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -23,11 +25,24 @@ export class IndicatorsService {
         private readonly indicatorRepository: Repository<Indicator>,
         private readonly objectivesService: ObjectivesService,
         private readonly resultsService: ResultsService,
+        @Inject(forwardRef(() => ActivitiesService))
         private readonly activitiesService: ActivitiesService,
     ) {}
 
-    async findAll(): Promise<Indicator[]> {
+    async findAll(filters?: {
+        type?: IndicatorType;
+        objectiveId?: number;
+        resultId?: number;
+        activityId?: number;
+    }): Promise<Indicator[]> {
+        const where: any = {};
+        if (filters?.type) where.type = filters.type;
+        if (filters?.objectiveId !== undefined) where.objectiveId = filters.objectiveId;
+        if (filters?.resultId !== undefined) where.resultId = filters.resultId;
+        if (filters?.activityId !== undefined) where.activityId = filters.activityId;
+
         return this.indicatorRepository.find({
+            where: Object.keys(where).length > 0 ? where : undefined,
             order: { id: 'ASC' },
             relations: ['objective', 'result', 'activity'],
         });
