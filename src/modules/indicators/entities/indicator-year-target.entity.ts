@@ -44,6 +44,13 @@ export class IndicatorYearTarget {
   })
   targetValue: number;
 
+  @Column({
+    name: 'achieved_value',
+    type: 'int',
+    nullable: true,
+  })
+  achievedValue: number | null;
+
   @CreateDateColumn({
     name: 'created_at',
   })
