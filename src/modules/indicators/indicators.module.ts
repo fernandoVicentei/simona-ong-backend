@@ -8,6 +8,8 @@ import { IndicatorsService } from './indicators.service';
 import { ObjectivesModule } from '../objectives/objectives.module';
 import { ResultsModule } from '../results/results.module';
 import { ActivitiesModule } from '../activities/activities.module';
+import { ProgramsModule } from '../programs/programs.module';
+import { StrategicPlansModule } from '../strategic-plans/strategic-plans.module';
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import { ActivitiesModule } from '../activities/activities.module';
     ObjectivesModule,
     ResultsModule,
     forwardRef(() => ActivitiesModule),
+    ProgramsModule,
+    StrategicPlansModule,
   ],
   controllers: [IndicatorsController],
   providers: [IndicatorsService],
