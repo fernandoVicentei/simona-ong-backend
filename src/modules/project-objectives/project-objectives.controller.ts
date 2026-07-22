@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ProjectObjectivesService } from './project-objectives.service';
 import { CreateProjectObjectiveDto } from './dto/create-project-objective.dto';
@@ -22,8 +23,12 @@ export class ProjectObjectivesController {
   ) {}
 
   @Get()
-  async findAll(): Promise<ApiResponse<ProjectObjective[]>> {
-    const data = await this.projectObjectivesService.findAll();
+  async findAll(
+    @Query('projectId') projectId?: string,
+  ): Promise<ApiResponse<ProjectObjective[]>> {
+    const data = await this.projectObjectivesService.findAll(
+      projectId ? Number(projectId) : undefined,
+    );
     return successResponse(
       data,
       'Listado de objetivos de proyecto obtenido exitosamente',

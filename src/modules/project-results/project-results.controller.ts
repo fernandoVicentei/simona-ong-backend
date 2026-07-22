@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ProjectResultsService } from './project-results.service';
 import { CreateProjectResultDto } from './dto/create-project-result.dto';
@@ -22,8 +23,14 @@ export class ProjectResultsController {
   ) {}
 
   @Get()
-  async findAll(): Promise<ApiResponse<ProjectResult[]>> {
-    const data = await this.projectResultsService.findAll();
+  async findAll(
+    @Query('projectObjectiveId') projectObjectiveId?: string,
+    @Query('projectId') projectId?: string,
+  ): Promise<ApiResponse<ProjectResult[]>> {
+    const data = await this.projectResultsService.findAll(
+      projectObjectiveId ? Number(projectObjectiveId) : undefined,
+      projectId ? Number(projectId) : undefined,
+    );
     return successResponse(
       data,
       'Listado de resultados de proyecto obtenido exitosamente',

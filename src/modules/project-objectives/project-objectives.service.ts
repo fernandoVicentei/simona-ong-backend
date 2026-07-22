@@ -18,10 +18,20 @@ export class ProjectObjectivesService {
     private readonly projectsService: ProjectsService,
   ) {}
 
-  async findAll(): Promise<ProjectObjective[]> {
+  async findAll(projectId?: number): Promise<ProjectObjective[]> {
+    if (projectId) {
+      return this.findByProject(projectId);
+    }
     return this.projectObjectiveRepository.find({
       order: { id: 'ASC' },
       relations: ['project'],
+    });
+  }
+
+  async findByProject(projectId: number): Promise<ProjectObjective[]> {
+    return this.projectObjectiveRepository.find({
+      where: { projectId },
+      order: { id: 'ASC' },
     });
   }
 

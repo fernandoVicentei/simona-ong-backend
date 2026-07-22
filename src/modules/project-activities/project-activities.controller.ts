@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { ProjectActivitiesService } from './project-activities.service';
 import { CreateProjectActivityDto } from './dto/create-project-activity.dto';
@@ -22,8 +23,12 @@ export class ProjectActivitiesController {
   ) {}
 
   @Get()
-  async findAll(): Promise<ApiResponse<ProjectActivity[]>> {
-    const data = await this.projectActivitiesService.findAll();
+  async findAll(
+    @Query('projectId') projectId?: string,
+  ): Promise<ApiResponse<ProjectActivity[]>> {
+    const data = await this.projectActivitiesService.findAll(
+      projectId ? Number(projectId) : undefined,
+    );
     return successResponse(
       data,
       'Listado de actividades de proyecto obtenido exitosamente',

@@ -4,7 +4,7 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { ProjectResult } from './entities/project-result.entity';
 import { ProjectObjectivesService } from '../project-objectives/project-objectives.service';
 import { CreateProjectResultDto } from './dto/create-project-result.dto';
@@ -18,8 +18,19 @@ export class ProjectResultsService {
     private readonly projectObjectivesService: ProjectObjectivesService,
   ) {}
 
-  async findAll(): Promise<ProjectResult[]> {
+  async findAll(projectObjectiveId?: number, projectId?: number): Promise<ProjectResult[]> {
+    if (projectId) {
+      const objectives = await this.projectObjectivesService.findByProject(projectId);
+      const objectiveIds = objectives.map((o) => o.id);
+      return this.projectResultRepository.find({
+        where: { projectObjectiveId: In(objectiveIds) },
+        order: { id: 'ASC' },
+        relations: ['objective'],
+      });
+    }
+    const where = projectObjectiveId ? { projectObjectiveId } : {};
     return this.projectResultRepository.find({
+      where,
       order: { id: 'ASC' },
       relations: ['objective'],
     });

@@ -60,7 +60,14 @@ export class ProjectsService {
   }
 
   async update(id: number, updateProjectDto: UpdateProjectDto): Promise<Project> {
-    const project = await this.findOne(id);
+    const project = await this.projectRepository.findOne({
+      where: { id },
+      relations: ['organization'],
+    });
+
+    if (!project) {
+      throw new NotFoundException(`El proyecto con ID ${id} no fue encontrado`);
+    }
 
     const organizationId =
       updateProjectDto.organizationId !== undefined

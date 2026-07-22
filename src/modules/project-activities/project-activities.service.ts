@@ -6,7 +6,7 @@ import {
   forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { ProjectActivity } from './entities/project-activity.entity';
 import { ProjectResultsService } from '../project-results/project-results.service';
 import { ProjectIndicatorsService } from '../project-indicators/project-indicators.service';
@@ -23,7 +23,16 @@ export class ProjectActivitiesService {
     private readonly projectIndicatorsService: ProjectIndicatorsService,
   ) {}
 
-  async findAll(): Promise<ProjectActivity[]> {
+  async findAll(projectId?: number): Promise<ProjectActivity[]> {
+    if (projectId) {
+      const results = await this.projectResultsService.findAll(undefined, projectId);
+      const resultIds = results.map((r) => r.id);
+      return this.projectActivityRepository.find({
+        where: { projectResultId: In(resultIds) },
+        order: { id: 'ASC' },
+        relations: ['result', 'objectiveIndicator', 'resultIndicator'],
+      });
+    }
     return this.projectActivityRepository.find({
       order: { id: 'ASC' },
       relations: ['result', 'objectiveIndicator', 'resultIndicator'],
