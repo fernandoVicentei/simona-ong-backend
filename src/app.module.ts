@@ -18,6 +18,11 @@ import { ObjectivesModule } from './modules/objectives/objectives.module';
 import { ResultsModule } from './modules/results/results.module';
 import { ActivitiesModule } from './modules/activities/activities.module';
 import { IndicatorsModule } from './modules/indicators/indicators.module';
+import { ProjectsModule } from './modules/projects/projects.module';
+import { ProjectObjectivesModule } from './modules/project-objectives/project-objectives.module';
+import { ProjectResultsModule } from './modules/project-results/project-results.module';
+import { ProjectActivitiesModule } from './modules/project-activities/project-activities.module';
+import { ProjectIndicatorsModule } from './modules/project-indicators/project-indicators.module';
 
 @Module({
   imports: [
@@ -35,6 +40,11 @@ import { IndicatorsModule } from './modules/indicators/indicators.module';
     ResultsModule,
     ActivitiesModule,
     IndicatorsModule,
+    ProjectsModule,
+    ProjectObjectivesModule,
+    ProjectResultsModule,
+    ProjectActivitiesModule,
+    ProjectIndicatorsModule,
   ],
   controllers: [AppController],
   providers: [

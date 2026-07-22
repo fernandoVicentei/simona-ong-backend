@@ -1,0 +1,60 @@
+import {
+    IsOptional,
+    IsString,
+    IsInt,
+    IsBoolean,
+    IsNumber,
+    IsDateString,
+    MaxLength,
+    Min,
+    Max,
+} from 'class-validator';
+
+export class UpdateProjectActivityDto {
+    @IsInt({ message: 'El ID del resultado del proyecto debe ser un número entero' })
+    @IsOptional()
+    projectResultId?: number;
+
+    @IsInt({ message: 'El ID del indicador de objetivo debe ser un número entero' })
+    @IsOptional()
+    objectiveIndicatorId?: number;
+
+    @IsInt({ message: 'El ID del indicador de resultado debe ser un número entero' })
+    @IsOptional()
+    resultIndicatorId?: number;
+
+    @IsString({ message: 'El código debe ser una cadena de texto' })
+    @IsOptional()
+    @MaxLength(30, { message: 'El código no puede exceder los 30 caracteres' })
+    code?: string;
+
+    @IsString({ message: 'El nombre debe ser una cadena de texto' })
+    @IsOptional()
+    @MaxLength(250, { message: 'El nombre no puede exceder los 250 caracteres' })
+    name?: string;
+
+    @IsString({ message: 'La descripción debe ser una cadena de texto' })
+    @IsOptional()
+    description?: string;
+
+    @IsNumber(
+        { maxDecimalPlaces: 2 },
+        { message: 'El porcentaje de cumplimiento debe ser un número con hasta 2 decimales' },
+    )
+    @IsOptional()
+    @Min(0, { message: 'El porcentaje de cumplimiento no puede ser menor a 0' })
+    @Max(100, { message: 'El porcentaje de cumplimiento no puede ser mayor a 100' })
+    completionPercentage?: number;
+
+    @IsDateString({}, { message: 'La fecha de inicio debe ser una fecha válida' })
+    @IsOptional()
+    startDate?: string;
+
+    @IsDateString({}, { message: 'La fecha de fin debe ser una fecha válida' })
+    @IsOptional()
+    endDate?: string;
+
+    @IsBoolean({ message: 'El estado activo debe ser un valor booleano' })
+    @IsOptional()
+    active?: boolean;
+}

@@ -24,7 +24,8 @@
     "migration:revert": "node -r tsconfig-paths/register node_modules/typeorm/cli-ts-node-commonjs migration:revert -d src/config/data-source.ts",
     "migration:show": "node -r tsconfig-paths/register node_modules/typeorm/cli-ts-node-commonjs migration:show -d src/config/data-source.ts",
     "seed": "ts-node -r tsconfig-paths/register src/database/seeders/index.ts",
-    "seed:strategic": "ts-node -r tsconfig-paths/register src/database/seeders/strategic-seeders.ts"
+    "seed:strategic": "ts-node -r tsconfig-paths/register src/database/seeders/strategic-seeders.ts",
+    "seed:projects": "ts-node -r tsconfig-paths/register src/database/seeders/project-seeders.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
