@@ -62,11 +62,14 @@ export class ProjectIndicatorsService {
     if (filters?.projectResultId !== undefined) where.projectResultId = filters.projectResultId;
     if (filters?.projectActivityId !== undefined) where.projectActivityId = filters.projectActivityId;
 
-    return this.indicatorRepository.find({
+    console.log('[ProjectIndicatorsService.findAll] where clause:', where);
+    const result = await this.indicatorRepository.find({
       where: Object.keys(where).length > 0 ? where : undefined,
       order: { id: 'ASC' },
       relations: ['projectObjective', 'projectResult', 'projectActivity', 'yearTargets', 'alignments'],
     });
+    console.log('[ProjectIndicatorsService.findAll] found:', result.length, 'indicators');
+    return result;
   }
 
   async findOne(id: number): Promise<ProjectIndicator> {

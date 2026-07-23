@@ -43,9 +43,11 @@ export class ProjectIndicatorsController {
     if (projectResultId) filters.projectResultId = Number(projectResultId);
     if (projectActivityId) filters.projectActivityId = Number(projectActivityId);
 
+    console.log('[ProjectIndicatorsController.findAll] filters:', filters);
     const data = await this.projectIndicatorsService.findAll(
       Object.keys(filters).length > 0 ? filters : undefined,
     );
+    console.log('[ProjectIndicatorsController.findAll] returned:', data.length, 'indicators');
     return successResponse(data, 'Listado de indicadores de proyecto obtenido exitosamente');
   }
 

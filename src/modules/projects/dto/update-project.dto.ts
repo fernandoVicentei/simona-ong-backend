@@ -37,7 +37,7 @@ export class UpdateProjectDto {
     endDate?: string;
 
     @IsEnum(ProjectStatus, {
-        message: 'El estado debe ser DRAFT, ACTIVE, SUSPENDED o CLOSED',
+        message: 'El estado debe ser DRAFT, ACTIVE o CLOSED',
     })
     @IsOptional()
     status?: ProjectStatus;

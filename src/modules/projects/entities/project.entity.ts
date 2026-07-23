@@ -18,7 +18,6 @@ import { ProjectObjective } from '../../project-objectives/entities/project-obje
 export enum ProjectStatus {
   DRAFT = 'DRAFT',
   ACTIVE = 'ACTIVE',
-  SUSPENDED = 'SUSPENDED',
   CLOSED = 'CLOSED',
 }
 
